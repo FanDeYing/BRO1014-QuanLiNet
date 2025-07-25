@@ -4,6 +4,18 @@
  */
 package net.ui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.JButton;
+import net.dao.MayDAO;
+import net.entity.May;
+import net.utils.GlobalState;
+
 /**
  *
  * @author admin
@@ -16,6 +28,38 @@ public class MayJDialog extends javax.swing.JDialog {
     public MayJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
+        HienThiMay();
+    }
+    public void HienThiMay(){
+        List <May> mayLst = MayDAO.readMay();
+        int may = mayLst.size();
+        int ngang = 5;
+        int doc = may/ngang;
+        
+        pnlMay.setLayout(new GridLayout(doc,ngang,10,10)); // chia khoảng cách các ô 
+        pnlMay.setPreferredSize(new Dimension(ngang*120,doc*150));
+        for(int i=0; i<mayLst.size(); i++){
+            JButton button = new JButton("May so"+mayLst.get(i).getIdMay());
+            pnlMay.add(button);
+            int IDMay = mayLst.get(i).getIdMay();
+            
+            if(mayLst.get(i).isTrangThaiMay()){ 
+                button.setBackground(Color.GREEN);
+            }else{
+                button.setBackground(Color.GRAY);
+            }
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    MayJDialog.this.dispose(); // this ở đây là dialog máy (nếu gọi this không thì là gọi actionPerformed)
+                    DichVuJDialog dichVu = new DichVuJDialog(null, true, IDMay); // IDMay ở đây để truyền vào lbnIDMay bên dịch vụ
+                    dichVu.setVisible(true);
+                }
+            });
+        }
+        pnlMay.revalidate();
+        pnlMay.repaint();
     }
 
     /**
@@ -27,21 +71,108 @@ public class MayJDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnlMay = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        btlQuayLai = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        javax.swing.GroupLayout pnlMayLayout = new javax.swing.GroupLayout(pnlMay);
+        pnlMay.setLayout(pnlMayLayout);
+        pnlMayLayout.setHorizontalGroup(
+            pnlMayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        pnlMayLayout.setVerticalGroup(
+            pnlMayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 323, Short.MAX_VALUE)
+        );
+
+        btlQuayLai.setText("QUAY LẠI");
+        btlQuayLai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btlQuayLaiActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("THÊM");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("SỬA");
+
+        jButton1.setText("XÓA");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(104, 104, 104)
+                .addComponent(btlQuayLai)
+                .addGap(74, 74, 74)
+                .addComponent(jButton3)
+                .addGap(95, 95, 95)
+                .addComponent(jButton2)
+                .addGap(62, 62, 62)
+                .addComponent(jButton1)
+                .addContainerGap(140, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btlQuayLai)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
+                .addGap(17, 17, 17))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(pnlMay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlMay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btlQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlQuayLaiActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        TrangChuJFrame trangChu = new TrangChuJFrame();
+        trangChu.setVisible(true);
+    }//GEN-LAST:event_btlQuayLaiActionPerformed
 
     /**
      * @param args the command line arguments
@@ -86,5 +217,11 @@ public class MayJDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btlQuayLai;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel pnlMay;
     // End of variables declaration//GEN-END:variables
 }

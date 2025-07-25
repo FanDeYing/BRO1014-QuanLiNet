@@ -3,6 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package net.ui;
+import java.awt.Graphics;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import net.utils.Auth;
+import net.utils.GlobalState;
 
 /**
  *
@@ -15,8 +20,13 @@ public class LoginJDialog extends javax.swing.JDialog {
      */
     public LoginJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();
+        this.setUndecorated(true);
+        //ẩn nút tắt dialog bằng x trên giao diện  
+        initComponents();  
+        this.setLocationRelativeTo(null);
+        //căn chỉnh giao diện ra giữa màn hình
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,21 +37,95 @@ public class LoginJDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jSeparator1 = new javax.swing.JSeparator();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtDangNhap = new javax.swing.JTextField();
+        pswMatKhau = new javax.swing.JPasswordField();
+        btnDangNhap = new javax.swing.JButton();
+        btnThoat = new javax.swing.JButton();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jMenuItem1.setText("jMenuItem1");
+
+        jMenu1.setText("jMenu1");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(450, 350));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 51, 255));
+        jLabel1.setText("ĐĂNG NHẬP");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 19, -1, -1));
+
+        jLabel2.setText("Tên Đăng Nhập: ");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 72, -1, -1));
+
+        jLabel3.setText("Mật Khẩu:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 136, 89, -1));
+        getContentPane().add(txtDangNhap, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 66, 212, 29));
+        getContentPane().add(pswMatKhau, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 129, 212, 30));
+
+        btnDangNhap.setBackground(new java.awt.Color(0, 0, 0));
+        btnDangNhap.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnDangNhap.setForeground(new java.awt.Color(255, 255, 255));
+        btnDangNhap.setText("ĐĂNG NHẬP");
+        btnDangNhap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDangNhapActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnDangNhap, new org.netbeans.lib.awtextra.AbsoluteConstraints(239, 206, -1, 32));
+
+        btnThoat.setBackground(new java.awt.Color(0, 0, 0));
+        btnThoat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnThoat.setForeground(new java.awt.Color(255, 255, 255));
+        btnThoat.setText("THOÁT");
+        btnThoat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThoatActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnThoat, new org.netbeans.lib.awtextra.AbsoluteConstraints(68, 206, 90, 32));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
+        // TODO add your handling code here:
+        String tenDangNhap = txtDangNhap.getText();
+        String matKhau = new String(pswMatKhau.getPassword());
+        boolean checkDangNhap = Auth.DangNhap(tenDangNhap, matKhau);       
+        if(txtDangNhap.getText() == null || txtDangNhap.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Vui lòng điền tên đăng nhập");
+        }
+        else if(pswMatKhau.getPassword() == null || new String(pswMatKhau.getPassword()).isEmpty()){
+            JOptionPane.showMessageDialog(this, "Vui lòng điền mật khẩu");
+        }
+        // kiểm tra trống 
+        
+        
+        else if(!checkDangNhap){
+            JOptionPane.showMessageDialog(this, "sai tên đăng nhập hoặc mật khẩu");           
+        }else{
+            String vaiTro = GlobalState.vaiTro ?"Admin":"Nhân viên";
+            JOptionPane.showMessageDialog(this, "đăng nhập với vai trò " +vaiTro );
+            this.dispose();
+            
+            TrangChuJFrame trangChu = new TrangChuJFrame();
+            trangChu.setVisible(true);
+        }
+        
+    }//GEN-LAST:event_btnDangNhapActionPerformed
+
+    private void btnThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoatActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_btnThoatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -86,5 +170,15 @@ public class LoginJDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDangNhap;
+    private javax.swing.JButton btnThoat;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPasswordField pswMatKhau;
+    private javax.swing.JTextField txtDangNhap;
     // End of variables declaration//GEN-END:variables
 }

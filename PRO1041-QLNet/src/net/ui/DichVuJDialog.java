@@ -4,18 +4,88 @@
  */
 package net.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import net.dao.DichVuDAO;
+import net.dto.DichVuDTO;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import javax.swing.Action;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+import net.dto.ThoiGianMay;
+import net.entity.ChiTietHoaDon;
+
 /**
  *
  * @author admin
  */
 public class DichVuJDialog extends javax.swing.JDialog {
 
+    private Timer tm;
+    private LocalTime gioBatDau;
+
     /**
      * Creates new form DichVuJDialog
      */
-    public DichVuJDialog(java.awt.Frame parent, boolean modal) {
+    public DichVuJDialog(java.awt.Frame parent, boolean modal, int IDMay) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
+
+        lbnIDMay.setText(String.valueOf(IDMay));
+        readDichVu();
+        readTGMay();
+    }
+
+    public void readDichVu() {
+        List<DichVuDTO> dichVuLst = DichVuDAO.readDichVu();
+        DefaultTableModel tblDichVu = (DefaultTableModel) this.tblDichVu.getModel();
+        tblDichVu.setRowCount(0);
+
+        for (DichVuDTO dichVu : dichVuLst) {
+            tblDichVu.addRow(new Object[]{
+                dichVu.getIDDichVu(),
+                dichVu.getTenDichVu(),
+                dichVu.getGia(),
+                dichVu.getIDLoaiDichVu()
+            });
+        }
+    }
+
+    public void boDemGio() {
+        LocalTime gioBatDau = LocalTime.now();
+        Timer tm = new Timer(1000, new ActionListener() { //tạo timer để sau 1000 mili giây hành động này lặp lại
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Duration khoangCachTG = Duration.between(gioBatDau, LocalTime.now()); // tình khoảng cách thời gian giữa 2 điểm
+                LocalTime gioKetThuc = gioBatDau.plus(khoangCachTG); // cộng thời gian trôi vào bắt đầu để đếm thời gian kết thúc
+                txtGioKetThuc.setText(gioKetThuc.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+            }
+        });
+        tm.start();
+    }
+
+    public void readTGMay() {
+        int IDMay = Integer.parseInt(lbnIDMay.getText().toString());
+        List<ThoiGianMay> tgMayLst = DichVuDAO.readTGMay(IDMay);
+        for (ThoiGianMay tgMay : tgMayLst) {
+            if (tgMay.isTrangThaiMay()) {
+                txtNgay.setText(tgMay.getNgayTao().toString());
+                txtTrangThai.setText(tgMay.isTrangThaiMay() ? "Bật" : "Tắt");
+                txtGioBatDau.setText(tgMay.getGioBatDau().toString());
+                txtGioKetThuc.setText(tgMay.getGioKetThuc().toString());
+                txtTongGio.setText(String.valueOf(tgMay.getTongGio()).toString());
+                return; //đóng vòng lặp ko dùng break vì sẽ chạy lệnh bên dưới
+            }
+        }
+        txtNgay.setText(LocalDate.now().toString());
+        txtGioBatDau.setText("00:00");
+        txtTrangThai.setText("Tắt");
+        txtGioKetThuc.setText("00:00");
+        txtTongGio.setText("00");
     }
 
     /**
@@ -27,21 +97,294 @@ public class DichVuJDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblDichVu = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txtTongGio = new javax.swing.JTextField();
+        txtNgay = new javax.swing.JTextField();
+        txtGioKetThuc = new javax.swing.JTextField();
+        txtGioBatDau = new javax.swing.JTextField();
+        btnBat = new javax.swing.JButton();
+        btnTat = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        spnSoLuong = new javax.swing.JSpinner();
+        btnOrder = new javax.swing.JButton();
+        btnThanhToan = new javax.swing.JButton();
+        btnQuayLai = new javax.swing.JButton();
+        txtTrangThai = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        lbnIDMay = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel1.setText("Máy: ");
+
+        tblDichVu.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID dịch vụ", "Tên dịch vụ", "Giá"
+            }
+        ));
+        jScrollPane2.setViewportView(tblDichVu);
+
+        jLabel5.setText("Ngày tạo: ");
+
+        jLabel6.setText("Giờ bắt đầu: ");
+
+        jLabel7.setText("Thời gian sử dụng:");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel8.setText("Tổng giờ: ");
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setText("--------------------------------------------------");
+
+        txtTongGio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTongGioActionPerformed(evt);
+            }
+        });
+
+        btnBat.setText("Bật máy");
+        btnBat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatActionPerformed(evt);
+            }
+        });
+
+        btnTat.setText("Tắt máy");
+        btnTat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTatActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Số lượng: ");
+
+        btnOrder.setText("Order");
+        btnOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrderActionPerformed(evt);
+            }
+        });
+
+        btnThanhToan.setText("THANH TOÁN");
+        btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThanhToanActionPerformed(evt);
+            }
+        });
+
+        btnQuayLai.setText("QUAY LẠI");
+        btnQuayLai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuayLaiActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("Trạng thái:");
+
+        lbnIDMay.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        lbnIDMay.setText("0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(btnBat)
+                        .addGap(64, 64, 64)
+                        .addComponent(btnTat)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnOrder)
+                        .addGap(72, 72, 72)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spnSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(101, 101, 101))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel9)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtTongGio, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(2, 2, 2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtGioKetThuc, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtGioBatDau, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49))))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(215, 215, 215)
+                        .addComponent(btnQuayLai)
+                        .addGap(90, 90, 90)
+                        .addComponent(btnThanhToan))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(308, 308, 308)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbnIDMay)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(lbnIDMay))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtNgay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(txtTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(txtGioBatDau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(txtGioKetThuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel9))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(17, 17, 17)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTongGio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnTat)
+                    .addComponent(btnBat)
+                    .addComponent(jLabel4)
+                    .addComponent(spnSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnOrder))
+                .addGap(43, 43, 43)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnThanhToan)
+                    .addComponent(btnQuayLai))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtTongGioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTongGioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTongGioActionPerformed
+
+    private void btnQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuayLaiActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        MayJDialog may = new MayJDialog(null, true); // null = ko cso frame cha nhưng vẫn có modal
+        may.setVisible(true);
+    }//GEN-LAST:event_btnQuayLaiActionPerformed
+
+    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "đến hóa đơn");
+        this.dispose();
+        HoaDonJDialog hoaDon = new HoaDonJDialog(null, rootPaneCheckingEnabled);
+        hoaDon.setVisible(true);
+    }//GEN-LAST:event_btnThanhToanActionPerformed
+
+    private void btnBatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatActionPerformed
+        // TODO add your handling code here:
+        int IDMay = Integer.parseInt(lbnIDMay.getText().toString());
+        int ketQua = DichVuDAO.setTrangThai(true, IDMay);
+        if (ketQua == 1) {
+            txtTrangThai.setText("Bật");
+            txtGioBatDau.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+            boDemGio();
+            JOptionPane.showMessageDialog(this, "Đã bật máy");
+        } else {
+            JOptionPane.showMessageDialog(this, "Bật thất bại");
+        }
+    }//GEN-LAST:event_btnBatActionPerformed
+
+    private void btnTatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTatActionPerformed
+        // TODO add your handling code here:
+        int IDMay = Integer.parseInt(lbnIDMay.getText().toString());
+        int ketQua = DichVuDAO.setTrangThai(false, IDMay);
+        if (ketQua == 1) {
+            if (tm.isRunning()) {
+                tm.stop();
+            }
+            Duration tongTg = Duration.between(gioBatDau, LocalTime.now());
+            float soGio = tongTg.toMinutes() / 60;
+            txtTrangThai.setText("Tắt");
+            txtTongGio.setText(String.format("%.2f giờ", soGio));
+            JOptionPane.showMessageDialog(this, "Đã tắt máy thành công \n số giờ của máy là: "+soGio);
+        }else {
+            JOptionPane.showMessageDialog(this, "Tắt máy thật bại");
+        }
+    }//GEN-LAST:event_btnTatActionPerformed
+
+    private void btnOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrderActionPerformed
+        // TODO add your handling code here:
+        int IDMay = Integer.parseInt(lbnIDMay.getText().toString());
+        int soLuong = (int) spnSoLuong.getValue();
+        int hangDV = tblDichVu.getSelectedRow();
+        int IDDichVu = Integer.parseInt(tblDichVu.getValueAt(hangDV, 0).toString());
+        float Gia = Float.parseFloat(tblDichVu.getValueAt(hangDV, 2).toString());
+
+        ChiTietHoaDon HDDV = new ChiTietHoaDon(IDDichVu, IDMay, IDDichVu, soLuong, Gia);
+        int ketQua = DichVuDAO.themDichVu(HDDV);
+
+        if (soLuong < 1) {
+            JOptionPane.showMessageDialog(this, "Số lượng phải lớn hơn 0!");
+        } else {
+            if (ketQua >= 1) {
+                Float ThanhTien = Gia * soLuong;
+                JOptionPane.showMessageDialog(this, "Order thành công \n Thành tiền: " + ThanhTien);
+            } else {
+                JOptionPane.showMessageDialog(this, "Order thất bại");
+            }
+        }
+    }//GEN-LAST:event_btnOrderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -73,7 +416,7 @@ public class DichVuJDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                DichVuJDialog dialog = new DichVuJDialog(new javax.swing.JFrame(), true);
+                DichVuJDialog dialog = new DichVuJDialog(new javax.swing.JFrame(), true, 0);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -86,5 +429,27 @@ public class DichVuJDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBat;
+    private javax.swing.JButton btnOrder;
+    private javax.swing.JButton btnQuayLai;
+    private javax.swing.JButton btnTat;
+    private javax.swing.JButton btnThanhToan;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lbnIDMay;
+    private javax.swing.JSpinner spnSoLuong;
+    private javax.swing.JTable tblDichVu;
+    private javax.swing.JTextField txtGioBatDau;
+    private javax.swing.JTextField txtGioKetThuc;
+    private javax.swing.JTextField txtNgay;
+    private javax.swing.JTextField txtTongGio;
+    private javax.swing.JTextField txtTrangThai;
     // End of variables declaration//GEN-END:variables
 }

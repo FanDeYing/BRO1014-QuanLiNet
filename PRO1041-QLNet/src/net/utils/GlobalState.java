@@ -1,13 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package net.utils;
 
-/**
- *
- * @author admin
- */
+package net.utils;
 public class GlobalState {
+    public static boolean vaiTro;
+    public static String tenNhanVien;
     
+    public static int IDMay;
 }
