@@ -327,8 +327,8 @@ public class DichVuJDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, "đến hóa đơn");
         this.dispose();
-        HoaDonJDialog hoaDon = new HoaDonJDialog(null, rootPaneCheckingEnabled);
-        hoaDon.setVisible(true);
+        ThanhToanJDialog thanhToan = new ThanhToanJDialog(null, rootPaneCheckingEnabled);
+        thanhToan.setVisible(true);
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnBatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatActionPerformed
