@@ -44,4 +44,25 @@ public class HoaDonDAO {
         return lstHDDTO;
 
     }
+     public static int createHoaDon(HoaDonDTO hoaDon ,int idMay){
+       String sql = "INSERT INTO HoaDon VALUES (?,?,?,?,?,?,?,?,?)";
+       try (Connection con = ketNoiDB.getConnectDB();
+               PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setInt(1, hoaDon.getIdHoaDon());
+            ps.setInt(2,hoaDon.getIdMay());
+            ps.setDate(3,new java.sql.Date(hoaDon.getNgayTao().getTime()));
+            ps.setTime(4,hoaDon.getGioBatDau());
+            ps.setTime(5,hoaDon.getGioKetThuc());
+            ps.setFloat(6, hoaDon.getTongGioChoi());
+            ps.setFloat(7, hoaDon.getGiaMay());
+            ps.setFloat(8, hoaDon.getGiaDichVu());
+            ps.setFloat(9, hoaDon.getTongTien());
+            int ketQua =ps.executeUpdate();
+            return ketQua;
+           
+       } catch (Exception e) {
+             return 0;
+       }
+     
+   }
 }

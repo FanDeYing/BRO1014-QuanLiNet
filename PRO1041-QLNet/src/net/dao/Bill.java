@@ -20,7 +20,7 @@ public class Bill {
             Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN, 14, BaseColor.BLACK);
             document.add(new Paragraph("HOA DON QUAN NET", font));
             document.add(new Paragraph(" ")); // dòng trống
-
+            
             document.add(new Paragraph("name: " + tenMay));
             document.add(new Paragraph("date: " + ngayTao));
             document.add(new Paragraph("start time: " + gioBatDau));

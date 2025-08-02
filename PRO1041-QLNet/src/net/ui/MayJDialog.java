@@ -32,9 +32,7 @@ public class MayJDialog extends javax.swing.JDialog {
         HienThiMay();
     }
 
-    MayJDialog() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
     public void HienThiMay(){
         List <May> mayLst = MayDAO.readMay();
         int may = mayLst.size();
@@ -78,7 +76,7 @@ public class MayJDialog extends javax.swing.JDialog {
         pnlMay = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         btlQuayLai = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnThem = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
@@ -102,10 +100,10 @@ public class MayJDialog extends javax.swing.JDialog {
             }
         });
 
-        jButton3.setText("THÊM");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnThem.setText("THÊM");
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnThemActionPerformed(evt);
             }
         });
 
@@ -121,7 +119,7 @@ public class MayJDialog extends javax.swing.JDialog {
                 .addGap(104, 104, 104)
                 .addComponent(btlQuayLai)
                 .addGap(74, 74, 74)
-                .addComponent(jButton3)
+                .addComponent(btnThem)
                 .addGap(95, 95, 95)
                 .addComponent(jButton2)
                 .addGap(62, 62, 62)
@@ -134,7 +132,7 @@ public class MayJDialog extends javax.swing.JDialog {
                 .addContainerGap(19, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btlQuayLai)
-                    .addComponent(jButton3)
+                    .addComponent(btnThem)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
                 .addGap(17, 17, 17))
@@ -167,9 +165,10 @@ public class MayJDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+
+
+    }//GEN-LAST:event_btnThemActionPerformed
 
     private void btlQuayLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlQuayLaiActionPerformed
         // TODO add your handling code here:
@@ -182,30 +181,6 @@ public class MayJDialog extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MayJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MayJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MayJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MayJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 MayJDialog dialog = new MayJDialog(new javax.swing.JFrame(), true);
@@ -222,9 +197,9 @@ public class MayJDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btlQuayLai;
+    private javax.swing.JButton btnThem;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel pnlMay;
     // End of variables declaration//GEN-END:variables

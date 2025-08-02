@@ -3,6 +3,8 @@ package net.dto;
 import java.util.Date;
 import java.sql.Time;
 public class HoaDonDTO {
+
+   
     private int IdHoaDon;
     private int IdMay;
     private Date NgayTao;
@@ -98,11 +100,5 @@ public class HoaDonDTO {
 
     public void setTongTien(float TongTien) {
         this.TongTien = TongTien;
-    }
-
-    public boolean isHoaDonDTO() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-   
+    }  
 }
